@@ -18,11 +18,6 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -49,11 +44,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
 class OrderCard extends StatefulWidget {
   PedidoModel model;
+  OrdersController controller;
 
   OrderCard(
-    this.model, {
-    Key? key,
-  }) : super(key: key);
+      this.model, this.controller,{
+        Key? key,
+      }) : super(key: key);
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -67,9 +63,9 @@ class _OrderCardState extends State<OrderCard> {
       children: [
         InkWell(
           onTap: () =>
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return OrderDetailScreen(widget.model);
-          })),
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return OrderDetailScreen(widget.model, widget.controller);
+              })),
           child: Ink(
             child: Card(
               shape: RoundedRectangleBorder(
@@ -106,7 +102,7 @@ class _OrderCardState extends State<OrderCard> {
                                       Text(
                                         'Cliente',
                                         style:
-                                            kCaption2.copyWith(color: kTextButtonColor),
+                                        kCaption2.copyWith(color: kTextButtonColor),
                                       ),
                                     ],
                                   ),
@@ -120,7 +116,7 @@ class _OrderCardState extends State<OrderCard> {
                         IconButton(
                             onPressed: () {
                               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                return OrderDetailScreen(widget.model);
+                                return OrderDetailScreen(widget.model, widget.controller);
                               }),);
                             },
                             icon: Icon(

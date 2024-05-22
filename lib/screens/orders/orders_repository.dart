@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -9,40 +11,87 @@ import '../../shared/core/user_storage.dart';
 
 class OrdersRepository extends GetxController {
   late String userToken;
+  late String userId;
+  final Dio _dio = Dio();
 
-  Future<List<PedidoModel>> getOrders(int? id) async {
-    Dio dio = Dio();
-    PedidoModel pedido = PedidoModel();
+  Future<List<PedidoModel>> getOrders(int bancaId) async {
     UserStorage userStorage = UserStorage();
-    List<PedidoModel> orders = [];
     userToken = await userStorage.getUserToken();
+    userId = await userStorage.getUserId();
+
+    log('Sending request with token: $userToken'); // Log do token
+
     try {
-      Response response = await dio.get('$kBaseURL/transacoes/bancas/$id',
+      var response = await _dio.get('$kBaseURL/transacoes/bancas/$bancaId',
           options: Options(
-            headers: {"Authorization": "Bearer $userToken"},
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              'Cache-Control': 'no-cache',
+              "Authorization": "Bearer $userToken"
+            },
           ));
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        List<dynamic> all = response.data['vendas'];
-        if (all.isNotEmpty) {
-          for (int i = 0; i < all.length; i++) {
-            if (all[i]["status"] == "pedido realizado" ||
-                all[i]["status"] == "pagamento pendente") {
-              pedido = PedidoModel(
-                id: all[i]["id"],
-                status: all[i]["status"],
-                tipoEntrega: all[i]["tipo_entrega"],
-                subtotal: double.tryParse(all[i]["subtotal"].toString()),
-                taxaEntrega: double.tryParse(all[i]["taxa_entrega"].toString()),
-                total: double.tryParse(all[i]["total"].toString()),
-                dataPedido: all[i]["dataPedido"],
-              );
+      if (response.statusCode == 200) {
+        /*  log('Response data: ${response.data}'); */
 
-              orders.add(pedido);
-            }
+        if (response.data['vendas'] != null) {
+          final jsonData = Map<String, dynamic>.from(response.data);
+          final ordersJson = List.from(jsonData['vendas'])
+              .map((item) => Map<String, dynamic>.from(item))
+              .toList();
+
+          List<PedidoModel> orders = [];
+          for (var orderJson in ordersJson) {
+            var order = PedidoModel.fromJson(orderJson);
+            orders.add(order);
           }
+
+          // Ordenar os pedidos pela data
+          orders.sort((a, b) => a.dataPedido!.compareTo(b.dataPedido!));
+
           return orders;
+        } else {
+          log('No vendas data available.');
+          return [];
         }
+      } else {
+        throw Exception(
+            'Falha em carregar os pedidos. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      log('Error making the request: $error');
+      rethrow;
+    }
+  }
+
+  Future<bool> confirmOrder(int pedidoId, bool confirm) async {
+    UserStorage userStorage = UserStorage();
+    userToken = await userStorage.getUserToken();
+
+    try {
+      var body = {
+        "confirmacao": confirm,
+      };
+
+      print(body);
+
+      Response response = await _dio.post(
+        '$kBaseURL/transacoes/$pedidoId/confirmar',
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": "Bearer $userToken"
+          },
+        ),
+        data: body,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
       if (e is DioError) {
@@ -51,9 +100,10 @@ class OrdersRepository extends GetxController {
           final errorMessage = dioError.response!.data['errors'];
           print('Erro: $errorMessage');
           print("Erro ${e.toString()}");
+          return false;
         }
       }
+      return false;
     }
-    return [];
   }
 }

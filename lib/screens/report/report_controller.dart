@@ -28,20 +28,22 @@ class ReportController extends GetxController {
 
   List<PedidoModel> get getOrders => orders;
 
-  Future<List<ReportCard>> populateOrderCard() async {
+  Future<List<ReportCard>> populateReportCard() async {
     List<ReportCard> list = [];
     UserStorage userStorage = UserStorage();
     var token = await userStorage.getUserToken();
     var userId = await userStorage.getUserId();
     bancaModel =
     homeScreenController.bancas[homeScreenController.banca.value];
-    var pedidos = await repository.getReports(bancaModel!.id);
+    var pedidos = await repository.getReports(bancaModel!.id!);
 
     quantPedidos = pedidos.length;
 
     for (int i = 0; i < pedidos.length; i++) {
-      ReportCard card = ReportCard(pedidos[i]);
-      list.add(card);
+      if (pedidos[i].status != "aguardando confirmação") {
+        ReportCard card = ReportCard(pedidos[i]);
+        list.add(card);
+      }
     }
 
     if (list.isNotEmpty) {
@@ -55,7 +57,7 @@ class ReportController extends GetxController {
 
   @override
   void onInit() async {
-    pedidos = await populateOrderCard();
+    pedidos = await populateReportCard();
     super.onInit();
     update();
   }
