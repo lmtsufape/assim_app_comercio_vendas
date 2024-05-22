@@ -1,23 +1,27 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thunderapp/screens/add_products/add_products_repository.dart';
+import 'package:thunderapp/screens/home/home_screen_controller.dart';
 import 'package:thunderapp/screens/home/home_screen_repository.dart';
 import 'package:thunderapp/shared/components/dialogs/default_alert_dialog.dart';
 import 'package:thunderapp/shared/constants/app_enums.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 import 'package:thunderapp/shared/core/models/banca_model.dart';
+import 'package:thunderapp/shared/core/models/list_banca_model.dart';
 
 import 'package:thunderapp/shared/core/models/table_products_model.dart';
 import 'package:thunderapp/shared/core/user_storage.dart';
 
 
 class AddProductsController extends GetxController {
+  final HomeScreenController homeScreenController = Get.put(HomeScreenController());
   ScreenState screenState = ScreenState.idle;
 
   // Informações para o post de cadastro de produtos.
@@ -29,7 +33,7 @@ class AddProductsController extends GetxController {
   String? salePrice;
   //String? costPrice;
   String? token;
-  BancaModel? bancaModel;
+  ListBancaModel? bancaModel;
   String? userId;
   late String userToken;
   bool hasImage = false;
@@ -49,8 +53,8 @@ class AddProductsController extends GetxController {
 
   final TextEditingController _descriptionController = TextEditingController();
 
-  CurrencyTextInputFormatter currencyFormatter =
-      CurrencyTextInputFormatter(locale: 'pt-Br', symbol: 'R\$');
+  // CurrencyTextInputFormatter currencyFormatter =
+  //     CurrencyTextInputFormatter(locale: 'pt-Br', symbol: 'R\$');
 
   final TextEditingController _saleController = TextEditingController();
 
@@ -233,7 +237,7 @@ class AddProductsController extends GetxController {
     super.onInit();
     token = await userStorage.getUserToken();
     userId = await userStorage.getUserId();
-    bancaModel = await homeRepository.getBancaPrefs(token, userId);
+    bancaModel = homeScreenController.bancas[homeScreenController.banca.value];
     products = await loadList();
     update();
   }

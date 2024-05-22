@@ -55,7 +55,7 @@ class HomeScreenRepository {
   }
 
   Future<BancaModel?> getBancaPrefs(
-      String? userToken, String? userId) async {
+      String? userToken, String? userId, int id) async {
     print('userId: $userId');
     print('chegou aqui');
 
@@ -67,18 +67,18 @@ class HomeScreenRepository {
           }));
       if (response.statusCode == 200) {
         BancaModel bancaModel = BancaModel(
-            response.data["bancas"][0]["id"],
-            response.data["bancas"][0]["nome"].toString(),
-            response.data["bancas"][0]["descricao"]
+            response.data["bancas"][id]["id"],
+            response.data["bancas"][id]["nome"].toString(),
+            response.data["bancas"][id]["descricao"]
                 .toString(),
-            response.data["bancas"][0]["horario_abertura"]
+            response.data["bancas"][id]["horario_abertura"]
                 .toString(),
-            response.data["bancas"][0]["horario_fechamento"]
+            response.data["bancas"][id]["horario_fechamento"]
                 .toString(),
-            response.data["bancas"][0]["preco_minimo"].toString(),
-            response.data["bancas"][0]["pix"].toString(),
-            response.data["bancas"][0]["feira_id"],
-            response.data["bancas"][0]["agricultor_id"]);
+            response.data["bancas"][id]["preco_minimo"].toString(),
+            response.data["bancas"][id]["pix"].toString(),
+            response.data["bancas"][id]["feira_id"],
+            response.data["bancas"][id]["agricultor_id"]);
         log('bancaModel: ${bancaModel.getNome}');
         return bancaModel;
       } else {

@@ -55,9 +55,10 @@ class _DropDownAddProductState extends State<DropDownBanca> {
                     );
                   }).toList(),
                   onChanged: (selectedObj) {
+                    int selectedIndex = widget.controller.bancas.indexWhere((banca) => banca.id == selectedObj!.id);
                     setState(() {
-                      widget.controller.setBanca(selectedObj!.id!);
-                      idScreen = widget.controller.banca!;
+                      widget.controller.setBanca(selectedIndex);
+                      idScreen = widget.controller.banca.value;
                     });
                   },
                   decoration: const InputDecoration(
@@ -75,8 +76,7 @@ class _DropDownAddProductState extends State<DropDownBanca> {
         TextButton(
           child: const Text('Ir'),
           onPressed: () {
-            navigator?.pushReplacement(
-                MaterialPageRoute(builder: (context)=>HomeScreen()));
+            Navigator.of(context).pop(Screens.home);
             print("valor do id: ${widget.controller.banca}");
           },
         ),

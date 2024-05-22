@@ -9,6 +9,7 @@ import 'package:thunderapp/screens/home/home_screen_repository.dart';
 import 'package:thunderapp/screens/add_products/add_products_repository.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 import 'package:thunderapp/shared/core/models/banca_model.dart';
+import 'package:thunderapp/shared/core/models/list_banca_model.dart';
 import 'package:thunderapp/shared/core/models/table_products_model.dart';
 import 'package:thunderapp/shared/core/user_storage.dart';
 
@@ -17,9 +18,10 @@ import '../list_products/components/card_products_list.dart';
 import 'list_products_repository.dart';
 
 class ListProductsController extends GetxController {
+  final HomeScreenController homeScreenController = Get.put(HomeScreenController());
   List<TableProductsModel> tableProducts = [];
   List<CardProductsList> products = [];
-  BancaModel? bancaModel;
+  ListBancaModel? bancaModel;
   int quantProducts = 0;
   int quantStock = 0;
   int? productId;
@@ -44,7 +46,7 @@ class ListProductsController extends GetxController {
     UserStorage userStorage = UserStorage();
     var token = await userStorage.getUserToken();
     var userId = await userStorage.getUserId();
-    bancaModel = await homeRepository.getBancaPrefs(token, userId);
+    bancaModel = homeScreenController.bancas[homeScreenController.banca.value];
 
     var products = await repository.getProducts(bancaModel?.id);
 

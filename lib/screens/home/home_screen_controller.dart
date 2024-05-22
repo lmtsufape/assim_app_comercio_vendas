@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thunderapp/screens/home/home_screen_repository.dart';
 import 'package:thunderapp/shared/core/models/banca_model.dart';
@@ -12,28 +14,28 @@ class HomeScreenController extends GetxController {
       HomeScreenRepository();
   String? userToken;
   BancaModel? bancaModel;
-  int banca = 0;
+  RxInt banca = 0.obs;
   String? userId;
-  List<ListBancaModel> bancas = [];
+  RxList<ListBancaModel> bancas = <ListBancaModel>[].obs;
 
   void loadBancas() async {
     userId = await userStorage.getUserId();
-    bancas = await homeScreenRepository.getBancas(userId!);
+    bancas.value = await homeScreenRepository.getBancas(userId!);
     update();
   }
 
-  void setBanca(int value) {
-    banca = value;
+  void setBanca(int value) async{
+    banca.value = value;
+    print("valor do index da banca: $banca");
+    await getBancaPrefs();
     update();
   }
 
   Future getBancaPrefs() async {
-    SharedPreferences prefs =
-        await SharedPreferences.getInstance();
     userId = await userStorage.getUserId();
     userToken = await userStorage.getUserToken();
     bancaModel = await homeScreenRepository.getBancaPrefs(
-        userToken, userId);
+        userToken, userId, banca.value);
     update();
   }
 
