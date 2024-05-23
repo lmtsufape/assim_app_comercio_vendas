@@ -56,13 +56,14 @@ class SignInScreen extends StatelessWidget {
                                       EdgeInsets.only(top: size.height * 0.03),
                                   padding: const EdgeInsets.only(
                                       top: 30, left: 28, bottom: 0, right: 28),
-                                  decoration: BoxDecoration(
-                                      color: kBackgroundColor,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15),
-                                          bottomLeft: Radius.zero,
-                                          bottomRight: Radius.zero)),
+                                  decoration: const BoxDecoration(
+                                    color: kBackgroundColor,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
+                                        bottomLeft: Radius.zero,
+                                        bottomRight: Radius.zero),
+                                  ),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -197,7 +198,7 @@ class SignInScreen extends StatelessWidget {
                                                   child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
                                                         backgroundColor:
-                                                          const Color(0XFF798E1E),
+                                                            kPrimaryColor,
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius:
                                                                 BorderRadius
@@ -278,7 +279,7 @@ class SignInScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Divider(
-                                    height: size.height * 0.085,
+                                    height: size.height * 0.12,
                                     color: Colors.transparent,
                                   ),
                                   Align(
@@ -292,14 +293,6 @@ class SignInScreen extends StatelessWidget {
                                         Divider(
                                             height: size.height * 0.007,
                                             color: Colors.transparent),
-                                        Text(
-                                          textAlign: TextAlign.center,
-                                          'ASSIM',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: size.height * 0.032,
-                                              color: kBackgroundColor),
-                                        ),
                                         Text(
                                           textAlign: TextAlign.center,
                                           '(aplicativo vendedor/a)',

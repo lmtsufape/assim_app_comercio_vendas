@@ -15,8 +15,6 @@ import 'package:thunderapp/shared/core/navigator.dart';
 import '../../shared/constants/app_enums.dart';
 
 class StartScreen extends StatelessWidget {
-
-
   const StartScreen({Key? key}) : super(key: key);
 
   @override
@@ -31,18 +29,15 @@ class StartScreen extends StatelessWidget {
             Container(
               color: kPrimaryColor,
               width: size.width,
-              padding:
-                  const EdgeInsets.all(kDefaultPadding),
+              padding: const EdgeInsets.all(kDefaultPadding),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Olá, Seja bem vindo(a) ${controller.userName}',
                     textAlign: TextAlign.center,
-                    style:
-                        kTitle1.copyWith(color: kTextColor),
+                    style: kTitle1.copyWith(color: kTextColor),
                   ),
                   SizedBox(
                     height: size.height * 0.3,
@@ -53,59 +48,50 @@ class StartScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                padding:
-                    const EdgeInsets.all(kDefaultPadding),
+                padding: const EdgeInsets.all(kDefaultPadding),
                 width: size.width,
                 height: size.height * 0.5,
-                decoration: BoxDecoration(
-                    color: kBackgroundColor,
-                    borderRadius:
-                        BorderRadius.circular(30)),
+                decoration: const BoxDecoration(
+                  color: kBackgroundColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                      bottomLeft: Radius.zero,
+                      bottomRight: Radius.zero,),
+                ),
                 child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       'Para começar, que tal entrar na sua conta?',
                       style: kTitle2.copyWith(fontSize: size.height * 0.028),
                       textAlign: TextAlign.center,
                     ),
-                    const VerticalSpacerBox(
-                        size: SpacerSize.huge),
-                    SignInController().status ==
-                            SignInStatus.loading
+                    const VerticalSpacerBox(size: SpacerSize.huge),
+                    SignInController().status == SignInStatus.loading
                         ? const CircularProgressIndicator()
                         : PrimaryButton(
-                            text:
-                                'Continuar como ${controller.userName}',
+                            text: 'Continuar como ${controller.userName}',
                             onPressed: () => controller.StartVeri(context)),
                     SizedBox(
                       width: size.width,
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          SignInController().errorMessage !=
-                                  null
+                          SignInController().errorMessage != null
                               ? Text(
-                                  SignInController()
-                                      .errorMessage!,
+                                  SignInController().errorMessage!,
                                   style: kCaption1,
                                 )
                               : const SizedBox(),
-                          const VerticalSpacerBox(
-                              size: SpacerSize.small),
+                          const VerticalSpacerBox(size: SpacerSize.small),
                           SecondaryButton(
-                              text:
-                                  'Não sou ${controller.userName}',
+                              text: 'Não sou ${controller.userName}',
                               onPressed: () {
                                 navigatorKey.currentState!
-                                    .pushReplacementNamed(
-                                        Screens.signin);
+                                    .pushReplacementNamed(Screens.signin);
                               }),
-                          const VerticalSpacerBox(
-                              size: SpacerSize.small),
-                        
+                          const VerticalSpacerBox(size: SpacerSize.small),
                         ],
                       ),
                     ),
