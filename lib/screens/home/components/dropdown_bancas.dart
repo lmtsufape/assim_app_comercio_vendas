@@ -74,7 +74,7 @@ class _DropDownAddProductState extends State<DropDownBanca> {
           ],
         ),
         TextButton(
-          child: const Text('Ir'),
+          child: const Text('Trocar'),
           onPressed: () {
             Navigator.of(context).pop(Screens.home);
             print("valor do id: ${widget.controller.banca}");
