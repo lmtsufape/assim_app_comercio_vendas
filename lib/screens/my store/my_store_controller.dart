@@ -234,7 +234,7 @@ class MyStoreController extends GetxController {
                   body: 'Sua banca foi criada',
                   confirmText: 'Ok',
                   onConfirm: () =>
-                      Navigator.pushReplacementNamed(context, Screens.home),
+                      Navigator.popAndPushNamed(context, Screens.home),
                   buttonColor: kSuccessColor,
                 ));
       } else {
