@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 //**FONT CONFIGURATION*/
 final kDefaultFontFamily = GoogleFonts.nunito().fontFamily;
 const double kDefaultFontSize = 18;
+const double kDefaultPaddingCardPedido = 17.0;
 final kSecondaryFontFamily =
     GoogleFonts.nunito().fontFamily;
 final kDescriptionFontFamily =
