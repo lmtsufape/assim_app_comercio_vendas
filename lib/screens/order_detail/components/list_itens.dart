@@ -27,7 +27,7 @@ class ItensPedidoWidget extends StatelessWidget {
             MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                  '${item.quantidade} ${item.tipoUnidade} x ${item.id}'),
+                  '${item.quantidade} ${item.tipoUnidade} x ${item.titulo}'),
               Text(
                   'R\$ ${item.preco?.toStringAsFixed(2)}'),
             ],
