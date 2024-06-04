@@ -16,6 +16,7 @@ import 'package:thunderapp/shared/core/models/pedido_model.dart';
 
 import '../../shared/components/dialogs/default_alert_dialog.dart';
 import '../../shared/constants/style_constants.dart';
+import '../../shared/core/models/produto_pedido_model.dart';
 import '../../shared/core/user_storage.dart';
 import '../home/home_screen.dart';
 
@@ -24,6 +25,7 @@ import '../home/home_screen.dart';
 class OrdersController extends GetxController {
   final HomeScreenController homeScreenController = Get.put(HomeScreenController());
   int quantPedidos = 0;
+  RxString statusOrder = ''.obs;
   ListBancaModel? bancaModel;
   HomeScreenRepository homeRepository = HomeScreenRepository();
   List<PedidoModel> orders = [];
@@ -56,6 +58,12 @@ class OrdersController extends GetxController {
     confirmedOrder = value;
     update();
   }
+
+  void setStatus(String value) {
+    statusOrder.value = value;
+    update();
+  }
+
 
   void confirmOrder(BuildContext context, int id) async {
     try {
@@ -287,10 +295,33 @@ class OrdersController extends GetxController {
     }
   }
 
+
+  List<ProdutoPedidoModel> getItensDoPedido(int pedidoId) {
+    var pedido = orders.firstWhere(
+            (order) => order.id == pedidoId,
+        orElse: () => PedidoModel(consumidorId: 0));
+    return pedido.listaDeProdutos ?? [];
+  }
+
+  Future<void> fetchOrders() async {
+    UserStorage userStorage = UserStorage();
+    String userId = await userStorage.getUserId();
+    try {
+      bancaModel =
+      homeScreenController.bancas[homeScreenController.banca.value];
+      var fetchedOrders = await repository.getOrders(bancaModel!.id!);
+      orders.assignAll(fetchedOrders);
+    } catch (e) {
+      print('Erro ao buscar pedidos: $e');
+    }
+  }
+
+
   @override
   void onInit() async {
     pedidos = await populateOrderCard();
     super.onInit();
+    fetchOrders();
     update();
   }
 

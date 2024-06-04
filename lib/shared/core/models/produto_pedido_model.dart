@@ -1,11 +1,17 @@
 class ProdutoPedidoModel {
-
-  String? id;
+  int? id;
   String? tipoUnidade;
-  int? quantidade;
+  String? quantidade;
   double? preco;
+  String? titulo;
 
-  ProdutoPedidoModel(
-      this.id, this.tipoUnidade, this.quantidade, this.preco);
 
+  ProdutoPedidoModel({
+    this.id,
+    this.tipoUnidade,
+    this.quantidade,
+    this.preco,
+    this.titulo,
+  }
+      );
 }
