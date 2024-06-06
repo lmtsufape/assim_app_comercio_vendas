@@ -160,15 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: size.width * 0.41,
                                   height: size.height * 0.2,
                                   child: ItemCardHolder(
-                                    icon: Icons.add_business_outlined,
-                                    title: 'Nova banca',
+                                    icon: Icons.list_alt_sharp,
+                                    title: 'Pedidos',
                                     onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => AddStoreScreen(),
-                                        ),
-                                      );
+                                      Navigator.pushNamed(
+                                          context, Screens.orders);
                                     },
                                     sizeIcon: size.height * 0.1,
                                     sizeText: size.height * 0.022,
@@ -203,11 +199,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: size.width * 0.28,
                                   height: size.height * 0.15,
                                   child: ItemCardHolder(
-                                    icon: Icons.list_alt_sharp,
-                                    title: 'Pedidos',
+                                    icon: Icons.add_business_outlined,
+                                    title: 'Nova banca',
                                     onTap: () {
-                                      Navigator.pushNamed(
-                                          context, Screens.orders);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => AddStoreScreen(),
+                                        ),
+                                      );
                                     },
                                     sizeIcon: size.height * 0.07,
                                     sizeText: size.height * 0.017,
