@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vidaagrovendedor">
+    package="com.assimvendedor">
    <application
         android:label="ASSIM Vendedor"
         android:name="${applicationName}"

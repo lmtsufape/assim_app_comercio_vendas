@@ -1,4 +1,4 @@
-package com.vidaagrovendedor
+package com.assimvendedor
 
 import io.flutter.embedding.android.FlutterActivity
 
