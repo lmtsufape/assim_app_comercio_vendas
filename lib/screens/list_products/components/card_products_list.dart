@@ -1,17 +1,16 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:thunderapp/screens/edit_products/edit_products_repository.dart';
 import 'package:thunderapp/screens/edit_products/edit_products_screen.dart';
-import 'package:thunderapp/screens/list_products/list_products_controller.dart';
-import 'package:thunderapp/screens/add_products/add_products_screen.dart';
 import 'package:thunderapp/screens/list_products/components/image_card_list.dart';
-import 'package:thunderapp/screens/list_products/list_products_controller.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 import 'package:thunderapp/shared/core/models/products_model.dart';
 import '../../../shared/core/models/table_products_model.dart';
 import '../list_products_repository.dart';
 
+// ignore: must_be_immutable
 class CardProductsList extends StatefulWidget {
   String userToken;
   ProductsModel model;
@@ -40,7 +39,7 @@ class _CardProductsListState extends State<CardProductsList> {
           height: size.height * 0.115,
           child: InkWell(
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       fullscreenDialog: true,
@@ -48,24 +47,27 @@ class _CardProductsListState extends State<CardProductsList> {
                           widget.model, widget.editRepository)));
             },
             child: Ink(
-              child: Card(
-                margin: EdgeInsets.zero,
-                color: Colors.white,
-                elevation: 1.3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: kBackgroundColor,
+                  borderRadius: BorderRadius.circular(12.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(121, 120, 120, 120),
+                      blurRadius: 7.0,
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ImageCardList(widget.userToken,
-                        widget.model.produtoTabeladoId, widget.listTable),
+                    ImageCardList(widget.userToken, widget.model.produtoTabeladoId, widget.listTable),
                     Container(
-                      width: size.width * 0.5615,
+                      width: size.width * 0.5,
                       alignment: Alignment.topLeft,
                       child: Padding(
                         padding:
-                            const EdgeInsetsDirectional.only(start: 8, end: 0),
+                        const EdgeInsetsDirectional.only(start: 12, end: 0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +75,7 @@ class _CardProductsListState extends State<CardProductsList> {
                             FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                widget.model.descricao.toString(),
+                                widget.model.titulo.toString(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: size.height * 0.016,
@@ -90,7 +92,7 @@ class _CardProductsListState extends State<CardProductsList> {
                               children: [
                                 Text(
                                   NumberFormat.simpleCurrency(
-                                          locale: 'pt-BR', decimalDigits: 2)
+                                      locale: 'pt-BR', decimalDigits: 2)
                                       .format(widget.model.preco),
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
