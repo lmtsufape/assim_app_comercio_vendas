@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:thunderapp/components/utils/vertical_spacer_box.dart';
-
 import 'package:thunderapp/screens/splash/splash_screen_controller.dart';
+import 'package:thunderapp/shared/components/bottomLogos/bottom_logos.dart';
+import 'package:thunderapp/shared/components/header_start_app/header_start_app.dart';
 import 'package:thunderapp/shared/constants/app_enums.dart';
-
 import 'package:thunderapp/shared/constants/app_number_constants.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 
@@ -20,18 +19,19 @@ class _SplashScreenState extends State<SplashScreen>
   late final SplashScreenController _controller;
   late final AnimationController animController;
   double opacity = 0;
-
   @override
   void initState() {
     super.initState();
-    animController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    animController = AnimationController(
+        vsync: this, duration: const Duration(seconds: 2));
     _controller = SplashScreenController(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setController();
-      stopController();
-      _controller.initApplication(() {});
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+        setController();
+        stopController();
+        _controller.initApplication(() {});
+      },
+    );
   }
 
   void setController() async {
@@ -39,12 +39,17 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void stopController() async {
-    Future.delayed(const Duration(milliseconds: 200), () {
-      setState(() {
-        opacity = 1;
-      });
-      animController.stop();
-    });
+    Future.delayed(
+      const Duration(milliseconds: 200),
+          () {
+        setState(
+              () {
+            opacity = 1;
+          },
+        );
+        animController.stop();
+      },
+    );
   }
 
   @override
@@ -52,69 +57,36 @@ class _SplashScreenState extends State<SplashScreen>
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () async {
-      //           animController.repeat();
-      //           stopController();
-      //         },
-      //         icon: Icon(Icons.add))
-      //   ],
-      // ),
       body: Stack(
         children: [
           Container(
             padding: const EdgeInsets.all(kDefaultPadding),
-            margin: const EdgeInsets.only(bottom: 128),
+            margin: const EdgeInsets.only(bottom: 245),
             decoration: const BoxDecoration(
               color: kPrimaryColor,
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.zero,
-                  topRight: Radius.zero,
-                  bottomLeft: Radius.circular(60),
-                  bottomRight: Radius.circular(60)),
+                topLeft: Radius.zero,
+                topRight: Radius.zero,
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40),
+              ),
             ),
             width: size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child:  Column(
               children: [
-                // Lottie.asset(
-                //     width: 220,
-                //     height: 220,
-                //     controller: animController,
-                //     Assets.introLottie,
-                //     fit: BoxFit.fill),
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: opacity,
-                  child: Text(
-                    'ASSIM Vendedor'.toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: kTitle1.copyWith(
-                        color: kOnSurfaceColor, fontSize: size.height * 0.038),
-                  ),
-                ),
-                const VerticalSpacerBox(size: SpacerSize.huge),
+                SizedBox(height: size.height * 0.12,),
+                const HeaderStartApp(),
+                const VerticalSpacerBox(
+                    size: SpacerSize.huge),
                 const CircularProgressIndicator(
                   color: Colors.white,
                 )
               ],
             ),
+
+
           ),
-          Padding(
-            padding: const EdgeInsets.all(kDefaultPadding),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                'LMTS - Laboratório Multidisciplinar de Tecnologias Sociais',
-                textAlign: TextAlign.center,
-                style: kBody2.copyWith(
-                    fontFamily: 'Roboto', fontSize: size.height * 0.022),
-              ),
-            ),
-          )
+          BottomLogos(150),
         ],
       ),
     );

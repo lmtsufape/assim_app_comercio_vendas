@@ -9,7 +9,7 @@ class StartRepository {
   final Dio _dio = Dio();
   int vazia = 5;
 
-  Future<int?> Start(
+  Future<int?> start(
       String? userToken, String? userId) async {
     print('userId: $userId');
     print('chegou aqui');

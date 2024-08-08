@@ -15,10 +15,10 @@ class StartController extends GetxController {
   String? userId;
   String userName = 'teste';
 
-  Future StartVeri(BuildContext context) async {
-    var succ = await startRepository.Start(
-        userToken = await userStorage.getUserToken(),
-        userId = await userStorage.getUserId(),
+  Future startVeri(BuildContext context) async {
+    var succ = await startRepository.start(
+      userToken = await userStorage.getUserToken(),
+      userId = await userStorage.getUserId(),
     );
     if(succ == 1){
       navigatorKey.currentState!
