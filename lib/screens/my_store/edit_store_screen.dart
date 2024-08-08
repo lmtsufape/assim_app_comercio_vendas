@@ -535,7 +535,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                               style: OutlinedButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 side: const BorderSide(
-                                    color: Colors.orange, width: 1.5),
+                                    color: kPrimaryColor, width: 1.5),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
                                 ),
@@ -543,7 +543,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                               child: Text(
                                 'Voltar',
                                 style: TextStyle(
-                                    color: Colors.orange,
+                                    color: kPrimaryColor,
                                     fontSize: size.height * 0.024,
                                     fontWeight: FontWeight.w500),
                               ),
