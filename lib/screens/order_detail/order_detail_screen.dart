@@ -47,13 +47,13 @@ class _OrderDetailScreenState
           child: Container(
             decoration: BoxDecoration(
               color:
-              Colors.white, // Cor de fundo do Container
+              Colors.white,
               borderRadius: BorderRadius.circular(
-                  10), // Bordas arredondadas
+                  10),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(
-                      0.5), // Cor da sombra com transparência
+                      0.5),
                   spreadRadius: 1,
                   blurRadius: 10,
                   offset: const Offset(0, 0),
@@ -98,11 +98,11 @@ class _OrderDetailScreenState
                             color: kTextButtonColor),
                       ),
                       Padding(
-                          padding:
-                          const EdgeInsetsDirectional
-                              .only(start: 10),
-                          child: Text(widget
-                              .model.consumidorName!)),
+                          padding: const EdgeInsetsDirectional.only(start: 10),
+                          child: Text(widget.model.consumidorName!,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,)
+                      ),
                       const SizedBox()
                     ],
                   ),
@@ -365,8 +365,7 @@ class _OrderDetailScreenState
           )
         ],
       );
-    } else if (widget.model.status ==
-        "comprovante anexado") {
+    } else if (widget.model.status == "comprovante anexado") {
       Size size = MediaQuery.of(context).size;
       return Scaffold(
         appBar: AppBar(
@@ -433,15 +432,10 @@ class _OrderDetailScreenState
                             color: kTextButtonColor),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional
-                            .only(start: 10),
-                        child: Text(
-                          widget.model.consumidorName
-                              .toString(),
-                          style: TextStyle(
-                              fontSize: size.height * 0.018,
-                              fontWeight: FontWeight.w700),
-                        ),
+                          padding: const EdgeInsetsDirectional.only(start: 10),
+                          child: Text(widget.model.consumidorName!,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,)
                       ),
                       const SizedBox()
                     ],
@@ -740,15 +734,10 @@ class _OrderDetailScreenState
                             color: kTextButtonColor),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional
-                            .only(start: 10),
-                        child: Text(
-                          widget.model.consumidorName
-                              .toString(),
-                          style: TextStyle(
-                              fontSize: size.height * 0.018,
-                              fontWeight: FontWeight.w700),
-                        ),
+                          padding: const EdgeInsetsDirectional.only(start: 10),
+                          child: Text(widget.model.consumidorName!,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,)
                       ),
                       const SizedBox()
                     ],
@@ -789,41 +778,24 @@ class _OrderDetailScreenState
                                         .fetchComprovanteBytes(
                                         widget.model
                                             .id!);
-                                    if (widget.controller
-                                        .comprovanteBytes !=
-                                        null) {
+                                    if (widget.controller.comprovanteBytes != null) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder:
-                                              (context) =>
-                                              FileViewScreen(
-                                                comprovanteBytes: widget
-                                                    .controller
-                                                    .comprovanteBytes!,
-                                                comprovanteType: widget
-                                                    .controller
-                                                    .comprovanteType!,
-                                              ),
+                                          builder: (context) => FileViewScreen(
+                                            comprovanteBytes: widget.controller.comprovanteBytes!,
+                                            comprovanteType: widget.controller.comprovanteType!,
+                                          ),
                                         ),
                                       );
                                     }
                                   },
                                   download: () async {
-                                    await widget
-                                        .controller
-                                        .downloadComprovante(
-                                        widget.model
-                                            .id!);
-                                    if (widget.controller
-                                        .downloadPath !=
-                                        null) {
-                                      ScaffoldMessenger
-                                          .of(context)
-                                          .showSnackBar(
+                                    await widget.controller.downloadComprovante(widget.model.id!);
+                                    if (widget.controller.downloadPath != null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
-                                            content: Text(
-                                                'Comprovante baixado com sucesso!')),
+                                            content: Text('Comprovante baixado com sucesso!')),
                                       );
                                     }
                                   },

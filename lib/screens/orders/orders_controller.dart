@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -6,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thunderapp/screens/home/home_screen_controller.dart';
 import 'package:thunderapp/screens/home/home_screen_repository.dart';
 import 'package:thunderapp/screens/orders/orders_repository.dart';
@@ -28,6 +30,7 @@ class OrdersController extends GetxController {
   RxString statusOrder = ''.obs;
   ListBancaModel? bancaModel;
   HomeScreenRepository homeRepository = HomeScreenRepository();
+  PedidoModel? pedidoModel;
   List<PedidoModel> orders = [];
   List<OrderCard> pedidos = [];
   late Future<List<dynamic>> orderData;
@@ -51,7 +54,6 @@ class OrdersController extends GetxController {
 
   Uint8List? get comprovanteBytes => _comprovanteBytes;
 
-
   List<PedidoModel> get getOrders => orders;
 
   void setConfirm(bool value) {
@@ -64,12 +66,10 @@ class OrdersController extends GetxController {
     update();
   }
 
-
   void confirmOrder(BuildContext context, int id) async {
     try {
       confirmSucess = await repository.confirmOrder(id, confirmedOrder);
       if (confirmSucess && confirmedOrder == true) {
-        // ignore: use_build_context_synchronously
         showDialog(
             context: context,
             builder: (context) => DefaultAlertDialogOneButton(
@@ -77,9 +77,15 @@ class OrdersController extends GetxController {
               body: 'O pedido foi aceito',
               confirmText: 'Ok',
               onConfirm: () {
-                navigator?.pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context)=>HomeScreen()),
-                      (Route<dynamic> route) => false,
+                // navigator?.pushAndRemoveUntil(
+                //   MaterialPageRoute(
+                //       builder: (context) =>
+                //           const HomeScreen()),
+                //   (Route<dynamic> route) => false,
+                // );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrdersScreen()),
                 );
               },
               buttonColor: kSuccessColor,
@@ -92,9 +98,9 @@ class OrdersController extends GetxController {
               body: 'O pedido foi negado',
               confirmText: 'Ok',
               onConfirm: () {
-                navigator?.pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context)=>HomeScreen()),
-                      (Route<dynamic> route) => false,
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrdersScreen()),
                 );
               },
               buttonColor: kSuccessColor,
@@ -116,36 +122,6 @@ class OrdersController extends GetxController {
           ],
         ),
       );
-    }
-  }
-
-  Future<List<OrderCard>> populateOrderCard() async {
-    List<OrderCard> list = [];
-    UserStorage userStorage = UserStorage();
-    var token = await userStorage.getUserToken();
-    var userId = await userStorage.getUserId();
-    bancaModel =
-    homeScreenController.bancas[homeScreenController.banca.value];
-
-    var pedidos = await repository.getOrders(bancaModel!.id!);
-
-    quantPedidos = pedidos.length;
-
-    for (int i = 0; i < pedidos.length; i++) {
-      if (pedidos[i].status != "pedido recusado" &&
-          pedidos[i].status != "pagamento expirado" &&
-          pedidos[i].status != "pedido entregue") {
-        OrderCard card = OrderCard(pedidos[i], OrdersController());
-        list.add(card);
-      }
-    }
-
-    if (list.isNotEmpty) {
-      update();
-      return list;
-    } else {
-      log('CARD VAZIO');
-      return list;
     }
   }
 
@@ -160,10 +136,9 @@ class OrdersController extends GetxController {
               body: 'O pedido está pronto',
               confirmText: 'Ok',
               onConfirm: () {
-                navigator?.pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => const HomeScreen()),
-                      (Route<dynamic> route) => false,
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrdersScreen()),
                 );
               },
               buttonColor: kSuccessColor,
@@ -176,10 +151,9 @@ class OrdersController extends GetxController {
               body: 'Erro na entrega',
               confirmText: 'Ok',
               onConfirm: () {
-                navigator?.pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => const HomeScreen()),
-                      (Route<dynamic> route) => false,
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrdersScreen()),
                 );
               },
               buttonColor: kSuccessColor,
@@ -202,6 +176,39 @@ class OrdersController extends GetxController {
         ),
       );
     }
+  }
+
+  Future<void> fetchOrders() async {
+    UserStorage userStorage = UserStorage();
+    String userId = await userStorage.getUserId();
+    try {
+      bancaModel =
+      homeScreenController.bancas[homeScreenController.banca.value];
+      var fetchedOrders = await repository.getOrders(bancaModel!.id!);
+      orders.assignAll(fetchedOrders);
+      await populateOrderCard();
+      update();
+    } catch (e) {
+      print('Erro ao buscar pedidos: $e');
+    }
+  }
+
+  Future<List<OrderCard>> populateOrderCard() async {
+    List<OrderCard> list = [];
+    bancaModel =
+    homeScreenController.bancas[homeScreenController.banca.value];
+
+    for (var order in orders) {
+      if (order.status != "pedido recusado" &&
+          order.status != "pagamento expirado" &&
+          order.status != "pedido entregue") {
+        OrderCard card = OrderCard(order, this);
+        list.add(card);
+      }
+    }
+
+    pedidos = list; // Atualiza a lista de pedidos exibidos
+    return list;
   }
 
   Future<String> fetchUserDetails(int userId) async {
@@ -295,35 +302,26 @@ class OrdersController extends GetxController {
     }
   }
 
+  Future<List<PedidoModel>> loadList() async {
+    UserStorage userStorage = UserStorage();
+    var userId = await userStorage.getUserId();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> listaString = prefs.getStringList('$userId/vendas') ?? [];
+    return listaString
+        .map((string) => PedidoModel.fromJson(json.decode(string)))
+        .toList();
+  }
 
   List<ProdutoPedidoModel> getItensDoPedido(int pedidoId) {
-    var pedido = orders.firstWhere(
-            (order) => order.id == pedidoId,
-        orElse: () => PedidoModel(consumidorId: 0));
+    var pedido = orders.firstWhere((order) => order.id == pedidoId,
+        orElse: () => PedidoModel(consumidorId: pedidoModel!.consumidorId));
     return pedido.listaDeProdutos ?? [];
   }
 
-  Future<void> fetchOrders() async {
-    UserStorage userStorage = UserStorage();
-    String userId = await userStorage.getUserId();
-    try {
-      bancaModel =
-      homeScreenController.bancas[homeScreenController.banca.value];
-      var fetchedOrders = await repository.getOrders(bancaModel!.id!);
-      orders.assignAll(fetchedOrders);
-    } catch (e) {
-      print('Erro ao buscar pedidos: $e');
-    }
-  }
-
-
   @override
-  void onInit() async {
-    pedidos = await populateOrderCard();
+  void onInit() {
     super.onInit();
     fetchOrders();
-    update();
   }
-
 }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:thunderapp/components/utils/vertical_spacer_box.dart';
 import 'package:thunderapp/screens/order_detail/order_detail_screen.dart';
@@ -17,6 +19,14 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+  OrdersController controller = Get.put(OrdersController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchOrders();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -29,11 +39,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
             style: kTitle2.copyWith(color: kPrimaryColor),
           ),
         ),
-        body: Container(
-          padding: const EdgeInsets.all(kDefaultPadding - kSmallSize),
-          height: size.height,
-          child: ListView(
-            children: controller.pedidos,
+        body: RefreshIndicator(
+          onRefresh: () => controller.fetchOrders(),
+          child: Container(
+            padding: const EdgeInsets.all(kDefaultPadding - kSmallSize),
+            height: size.height,
+            child: ListView(
+              children: controller.pedidos,
+            ),
           ),
         ),
       ),
@@ -41,13 +54,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 }
 
-// ignore: must_be_immutable
 class OrderCard extends StatefulWidget {
-  PedidoModel model;
-  OrdersController controller;
+  final PedidoModel model;
+  final OrdersController controller;
 
-  OrderCard(
-      this.model, this.controller,{
+  const OrderCard(
+      this.model,
+      this.controller,{
         Key? key,
       }) : super(key: key);
 
@@ -124,17 +137,6 @@ class _OrderCardState extends State<OrderCard> {
                               ],
                             ),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return OrderDetailScreen(widget.model, widget.controller);
-                                }),);
-                              },
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: kPrimaryColor,
-                                size: size.height * 0.05,
-                              )),
                         ],
                       ),
                       const Divider(),
@@ -169,7 +171,7 @@ class _OrderCardState extends State<OrderCard> {
                         children: <Widget>[
                           Text(
                             DateFormat('dd/MM/yyyy').format(widget.model.dataPedido!),
-                            style: kCaption2.copyWith(color: kTextButtonColor, fontSize: 16),
+                            style: kCaption2.copyWith(color: kTextButtonColor, fontSize: 15),
                           ),
                           Container(
                             padding: const EdgeInsets.all(kTinySize),
@@ -178,7 +180,7 @@ class _OrderCardState extends State<OrderCard> {
                                 color: kAlertColor),
                             child: Text(
                               widget.model.status.toString(),
-                              style: kCaption2.copyWith(color: kBackgroundColor),
+                              style: kCaption2.copyWith(color: kBackgroundColor, fontSize: 14),
                             ),
                           )
                         ],
