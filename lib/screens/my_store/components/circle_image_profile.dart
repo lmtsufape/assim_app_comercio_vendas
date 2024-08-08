@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thunderapp/screens/my%20store/my_store_controller.dart';
+import 'package:thunderapp/screens/my_store/my_store_controller.dart';
 
 import '../../../components/utils/horizontal_spacer_box.dart';
 import '../../../shared/constants/app_enums.dart';

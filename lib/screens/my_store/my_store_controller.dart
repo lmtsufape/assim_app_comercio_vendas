@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:thunderapp/screens/my%20store/my_store_repository.dart';
+import 'package:thunderapp/screens/my_store/my_store_repository.dart';
 import 'package:thunderapp/shared/core/models/banca_model.dart';
 import 'package:thunderapp/shared/core/models/feira_model.dart';
 import 'package:thunderapp/shared/core/user_storage.dart';
