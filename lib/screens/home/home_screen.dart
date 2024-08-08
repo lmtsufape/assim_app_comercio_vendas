@@ -6,7 +6,7 @@ import 'package:thunderapp/components/buttons/primary_button.dart';
 import 'package:thunderapp/screens/home/components/dropdown_bancas.dart';
 import 'package:thunderapp/screens/home/home_screen_controller.dart';
 import 'package:thunderapp/screens/list_products/list_products_screen.dart';
-import 'package:thunderapp/screens/my%20store/add_store_screen.dart';
+import 'package:thunderapp/screens/my_store/add_store_screen.dart';
 import 'package:thunderapp/screens/screens_index.dart';
 import 'package:thunderapp/shared/constants/app_enums.dart';
 import 'package:thunderapp/shared/constants/app_number_constants.dart';
@@ -14,7 +14,7 @@ import 'package:thunderapp/shared/constants/app_text_constants.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 import 'package:thunderapp/shared/core/user_storage.dart';
 import '../../components/utils/horizontal_spacer_box.dart';
-import '../my store/edit_store_screen.dart';
+import '../my_store/edit_store_screen.dart';
 import 'components/item_card_holder.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const HorizontalSpacerBox(size: SpacerSize.small),
                         SizedBox(
-                          width: size.width * 0.61,
+                          width: size.width * 0.65,
                           child: Row(
                             mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
@@ -107,17 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                     ),
-                              IconButton(
-                                  onPressed: () {
-                                    Get.dialog(
-                                          DropDownBanca(controller),
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.change_circle_outlined,
-                                    color: kPrimaryColor,
-                                    size: size.height * 0.04,
-                                  )),
+                              DropDownBanca(controller),
                             ],
                           ),
                         ),

@@ -13,7 +13,7 @@ import 'package:thunderapp/screens/start/start_screen.dart';
 import 'package:thunderapp/shared/constants/app_theme.dart';
 import 'package:thunderapp/shared/core/navigator.dart';
 import 'screens/home/home_screen.dart';
-import 'screens/my store/add_store_screen.dart';
+import 'screens/my_store/add_store_screen.dart';
 import 'screens/signin/sign_in_screen.dart';
 import 'screens/splash/splash_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
