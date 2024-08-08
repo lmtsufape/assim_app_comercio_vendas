@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thunderapp/screens/add_products/add_products_controller.dart';
 import 'package:thunderapp/screens/home/home_screen.dart';
-import 'package:thunderapp/screens/screens_index.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 
 import '../../../shared/components/dialogs/default_alert_dialog.dart';
+import '../../list_products/list_products_screen.dart';
+import '../../screens_index.dart';
 
 class ElevatedButtonAddProduct extends StatefulWidget {
   final AddProductsController controller;
@@ -14,8 +15,8 @@ class ElevatedButtonAddProduct extends StatefulWidget {
       : super(key: key);
 
   static ButtonStyle styleEditProduct =
-      ElevatedButton.styleFrom(
-    backgroundColor: kDetailColor,
+  ElevatedButton.styleFrom(
+    backgroundColor: kPrimaryColor,
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5)),
   );
@@ -40,18 +41,25 @@ class _ElevatedButtonAddProductState
             var response =
             await widget.controller.validateEmptyFields(context);
             if(response) {
-            showDialog(
-                context: context,
-                builder: ((context) =>
-                    DefaultAlertDialogOneButton(
-                      title: 'Sucesso',
-                      body:
-                          'Produto cadastrado com sucesso',
-                      confirmText: 'Ok',
-                      onConfirm: () => Get.offAll(() => HomeScreen()),
-                      buttonColor: kSuccessColor,
-                    )));
-          }}
+              showDialog(
+                // ignore: use_build_context_synchronously
+                  context: context,
+                  builder: ((context) =>
+                      DefaultAlertDialogOneButton(
+                        title: 'Sucesso',
+                        body:
+                        'Produto cadastrado com sucesso',
+                        confirmText: 'Ok',
+                        onConfirm: () {
+                          navigator?.pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context)=>const ListProductsScreen()),
+                                (Route<dynamic> route) => false,
+                          );
+                          widget.controller.clearFields();
+                        },
+                        buttonColor: kSuccessColor,
+                      )));
+            }}
         },
         style: ElevatedButtonAddProduct.styleEditProduct,
         child: Text(

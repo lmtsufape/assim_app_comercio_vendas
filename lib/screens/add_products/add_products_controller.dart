@@ -15,10 +15,8 @@ import 'package:thunderapp/shared/constants/app_enums.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 import 'package:thunderapp/shared/core/models/banca_model.dart';
 import 'package:thunderapp/shared/core/models/list_banca_model.dart';
-
 import 'package:thunderapp/shared/core/models/table_products_model.dart';
 import 'package:thunderapp/shared/core/user_storage.dart';
-
 
 class AddProductsController extends GetxController {
   final HomeScreenController homeScreenController = Get.put(HomeScreenController());
@@ -37,7 +35,8 @@ class AddProductsController extends GetxController {
   String? userId;
   late String userToken;
   bool hasImage = false;
-
+  var selectedDropdownValue1 = 'DefaultValue1'.obs;
+  var selectedDropdownValue2 = 'DefaultValue2'.obs;
   // -----------------------
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -53,9 +52,6 @@ class AddProductsController extends GetxController {
 
   final TextEditingController _descriptionController = TextEditingController();
 
-  // CurrencyTextInputFormatter currencyFormatter =
-  //     CurrencyTextInputFormatter(locale: 'pt-Br', symbol: 'R\$');
-
   final TextEditingController _saleController = TextEditingController();
 
   final TextEditingController _titleController = TextEditingController();
@@ -69,10 +65,8 @@ class AddProductsController extends GetxController {
   TextEditingController get descriptionController => _descriptionController;
 
   double changeProfit(String salePrice, String costPrice) {
-    salePrice =
-        salePrice.replaceAll(RegExp(r'[^0-9,.]'), '').replaceAll(',', '.');
-    costPrice =
-        costPrice.replaceAll(RegExp(r'[^0-9,.]'), '').replaceAll(',', '.');
+    salePrice = salePrice.replaceAll(RegExp(r'[^0-9,.]'), '').replaceAll(',', '.');
+    costPrice = costPrice.replaceAll(RegExp(r'[^0-9,.]'), '').replaceAll(',', '.');
 
     double profit = 0.0;
     if (salePrice.isNotEmpty && costPrice.isNotEmpty) {
@@ -153,9 +147,9 @@ class AddProductsController extends GetxController {
       if (e is DioError && e.response?.statusCode == 400) {
         Get.dialog(
           AlertDialog(
-            title:  Text('Erro', style: TextStyle(fontSize: size.height * 0.026)),
+            title: Text('Erro', style: TextStyle(fontSize: size.height * 0.026)),
             content: Text('Esse produto já está cadastrado.', style: TextStyle(fontSize: size.height * 0.022),),
-            actions:<Widget>[
+            actions: <Widget>[
               Align(
                 alignment: Alignment.center,
                 child: Padding(
@@ -232,6 +226,25 @@ class AddProductsController extends GetxController {
     return null;
   }
 
+  void clearFields() {
+    _saleController.clear();
+    _titleController.clear();
+    _descriptionController.clear();
+    _stockController.clear();
+    measure = 'unidade';
+    productId = null;
+    update();
+  }
+
+  @override
+  void onClose() {
+    _saleController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _stockController.dispose();
+    super.onClose();
+  }
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -239,6 +252,7 @@ class AddProductsController extends GetxController {
     userId = await userStorage.getUserId();
     bancaModel = homeScreenController.bancas[homeScreenController.banca.value];
     products = await loadList();
+    clearFields();
     update();
   }
 }

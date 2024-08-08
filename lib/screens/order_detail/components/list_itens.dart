@@ -14,22 +14,25 @@ class ItensPedidoWidget extends StatelessWidget {
 
     return itens.isEmpty
         ? const Center(
-        child: Text('Nenhum item encontrado'))
+      child: Text('Nenhum item encontrado'),
+    )
         : ListView.builder(
       shrinkWrap: true,
       itemCount: itens.length,
       itemBuilder: (context, index) {
         var item = itens[index];
-        String? nomeItem = item.titulo ?? "Produto indisponível";
         return ListTile(
           title: Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                  '${item.quantidade} ${item.tipoUnidade} x ${item.titulo}'),
-              Text(
-                  'R\$ ${item.preco?.toStringAsFixed(2)}'),
+              Text('${item.quantidade} ${item.tipoUnidade} x ${item.titulo}',
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                style: const TextStyle(fontSize: 12),
+              ),
+              Text('R\$ ${item.preco?.toStringAsFixed(2)}',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
             ],
           ),
         );

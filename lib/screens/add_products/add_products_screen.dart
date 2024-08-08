@@ -24,7 +24,7 @@ class AddProductsScreen extends StatefulWidget {
 class _AddProductsScreenState
     extends State<AddProductsScreen> {
   AddProductsRepository repository =
-      AddProductsRepository();
+  AddProductsRepository();
 
   Future<List<TableProductsModel>>? products;
 
@@ -52,7 +52,7 @@ class _AddProductsScreenState
               style: kTitle2.copyWith(color: Colors.white),
             ),
             iconTheme:
-                const IconThemeData(color: Colors.white),
+            const IconThemeData(color: Colors.white),
           ),
           body: Form(
             key: controller.formKey,
@@ -71,31 +71,14 @@ class _AddProductsScreenState
                     height: size.height * 0.03,
                     color: Colors.transparent,
                   ),
-                  Text(
-                    'Imagem do produto',
-                    style: TextStyle(
-                      fontSize: size.height * 0.018,
-                      fontWeight: FontWeight.w700,
-                      color: kSecondaryColor,
-                    ),
-                  ),
                   Divider(
                     height: size.height * 0.005,
                     color: Colors.transparent,
                   ),
-                  DropDownAddProduct(controller),
-                  Divider(
-                    height: size.height * 0.03,
-                    color: Colors.transparent,
-                  ),
                   SaleInfos(controller),
-                  Divider(
-                    height: size.height * 0.03,
-                    color: Colors.transparent,
-                  ),
                   Align(
                       alignment:
-                          AlignmentDirectional.centerStart,
+                      AlignmentDirectional.centerStart,
                       child: DropDownQtdAddProduct(controller)),
                   Divider(
                     height: size.height * 0.03,

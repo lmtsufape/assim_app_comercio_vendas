@@ -33,7 +33,6 @@ class ListProductsController extends GetxController {
   EditProductsRepository editRepository = EditProductsRepository();
   ListProductsRepository repository = ListProductsRepository();
   final TextEditingController _searchController = TextEditingController();
-
   TextEditingController get searchController => _searchController;
 
   void setHasImage(bool value) {
@@ -47,16 +46,17 @@ class ListProductsController extends GetxController {
     var token = await userStorage.getUserToken();
     var userId = await userStorage.getUserId();
     bancaModel = homeScreenController.bancas[homeScreenController.banca.value];
-
     var products = await repository.getProducts(bancaModel?.id);
-
     quantProducts = products.length;
 
     if (products.isNotEmpty) {
       for (int i = 0; i < products.length; i++) {
-        print(products[i]);
-        CardProductsList card =
-            CardProductsList(token, products[i], repository, tableProducts, editRepository);
+        CardProductsList card = CardProductsList(
+            token,
+            products[i],
+            repository,
+            tableProducts,
+            editRepository);
         list.add(card);
         if (products.isNotEmpty) {
           quantStock += products[i].estoque!;
@@ -77,22 +77,32 @@ class ListProductsController extends GetxController {
     }
   }
 
-
   Future<List<TableProductsModel>> loadList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> listaString =
-        prefs.getStringList('listaProdutosTabelados') ?? [];
-    return listaString
-        .map((string) => TableProductsModel.fromJson(json.decode(string)))
-        .toList();
+    List<String> listaString = prefs.getStringList('listaProdutosTabelados') ?? [];
+    return listaString.map((string) => TableProductsModel.fromJson(json.decode(string))).toList();
   }
 
-
-  @override
-  void onInit() async {
-    super.onInit();
+  Future<void> fetchProducts() async {
     tableProducts = await loadList();
     products = await populateCardsProductsList();
     update();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchProducts();
+    update();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    refreshProductList();
+  }
+
+  void refreshProductList() {
+    populateCardsProductsList().then((_) => update());
   }
 }

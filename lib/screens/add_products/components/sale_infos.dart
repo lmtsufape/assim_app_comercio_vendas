@@ -1,14 +1,17 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:thunderapp/components/forms/custom_text_form_field.dart';
 import 'package:thunderapp/screens/add_products/add_products_controller.dart';
+import 'package:thunderapp/screens/add_products/components/dropdown_add_product.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 
 class SaleInfos extends StatefulWidget {
   final AddProductsController controller;
 
-  const SaleInfos(this.controller, {Key? key}) : super(key: key);
+  const SaleInfos(this.controller, {Key? key})
+      : super(key: key);
 
   @override
   State<SaleInfos> createState() => _SaleInfosState();
@@ -51,8 +54,9 @@ class _SaleInfosState extends State<SaleInfos> {
                   child: Container(
                     alignment: Alignment.center,
                     child: CustomTextFormField(
-                      hintText: 'Maçã',
-                      erroStyle: const TextStyle(fontSize: 12),
+                      hintText: 'Nome do produto',
+                      erroStyle:
+                      const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
@@ -60,10 +64,11 @@ class _SaleInfosState extends State<SaleInfos> {
                       },
                       onChanged: (value) {
                         setState(() {
-                          widget.controller.setDescription();
+                          widget.controller.setTitle();
                         });
                       },
-                      controller: widget.controller.descriptionController,
+                      controller:
+                      widget.controller.titleController,
                     ),
                   ),
                 ),
@@ -98,19 +103,22 @@ class _SaleInfosState extends State<SaleInfos> {
                   child: Container(
                     alignment: Alignment.center,
                     child: CustomTextFormField(
-                      hintText: 'Fruta',
-                      erroStyle: const TextStyle(fontSize: 12),
+                      hintText: 'Descrição do produto',
+                      erroStyle:
+                      const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
                         }
                       },
                       onChanged: (value) {
-                         setState(() {
-                           widget.controller.setTitle();
-                         });
+                        setState(() {
+                          widget.controller
+                              .setDescription();
+                        });
                       },
-                      controller: widget.controller.titleController,
+                      controller: widget
+                          .controller.descriptionController,
                     ),
                   ),
                 ),
@@ -118,6 +126,22 @@ class _SaleInfosState extends State<SaleInfos> {
             )
           ],
         ),
+        Divider(
+          height: size.height * 0.03,
+          color: Colors.transparent,
+        ),
+        Align(
+          alignment: AlignmentDirectional.topStart,
+          child: Text(
+            'Imagem do produto',
+            style: TextStyle(
+              fontSize: size.height * 0.018,
+              fontWeight: FontWeight.w700,
+              color: kSecondaryColor,
+            ),
+          ),
+        ),
+        DropDownAddProduct(widget.controller),
         Divider(
           height: size.height * 0.03,
           color: Colors.transparent,
@@ -148,7 +172,8 @@ class _SaleInfosState extends State<SaleInfos> {
                   child: Container(
                     alignment: Alignment.center,
                     child: CustomTextFormFieldCurrency(
-                      erroStyle: const TextStyle(fontSize: 12),
+                      erroStyle:
+                      const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
@@ -162,17 +187,22 @@ class _SaleInfosState extends State<SaleInfos> {
                       },
                       currencyFormatter: <TextInputFormatter>[
                         CurrencyTextInputFormatter(
-                          locale: 'pt-BR',
+                          locale: 'pt_BR',
                           symbol: 'R\$',
                           decimalDigits: 2,
                         ),
                         LengthLimitingTextInputFormatter(9),
                       ],
-                      controller: widget.controller.saleController,
+                      controller:
+                      widget.controller.saleController,
                     ),
                   ),
                 ),
               ),
+            ),
+            Divider(
+              height: size.height * 0.03,
+              color: Colors.transparent,
             ),
           ],
         ),
