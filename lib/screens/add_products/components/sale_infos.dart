@@ -56,7 +56,7 @@ class _SaleInfosState extends State<SaleInfos> {
                     child: CustomTextFormField(
                       hintText: 'Nome do produto',
                       erroStyle:
-                      const TextStyle(fontSize: 12),
+                          const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
@@ -68,7 +68,7 @@ class _SaleInfosState extends State<SaleInfos> {
                         });
                       },
                       controller:
-                      widget.controller.titleController,
+                          widget.controller.titleController,
                     ),
                   ),
                 ),
@@ -105,7 +105,7 @@ class _SaleInfosState extends State<SaleInfos> {
                     child: CustomTextFormField(
                       hintText: 'Descrição do produto',
                       erroStyle:
-                      const TextStyle(fontSize: 12),
+                          const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
@@ -173,7 +173,7 @@ class _SaleInfosState extends State<SaleInfos> {
                     alignment: Alignment.center,
                     child: CustomTextFormFieldCurrency(
                       erroStyle:
-                      const TextStyle(fontSize: 12),
+                          const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
@@ -186,7 +186,7 @@ class _SaleInfosState extends State<SaleInfos> {
                         });
                       },
                       currencyFormatter: <TextInputFormatter>[
-                        CurrencyTextInputFormatter(
+                        CurrencyTextInputFormatter.currency(
                           locale: 'pt_BR',
                           symbol: 'R\$',
                           decimalDigits: 2,
@@ -194,7 +194,7 @@ class _SaleInfosState extends State<SaleInfos> {
                         LengthLimitingTextInputFormatter(9),
                       ],
                       controller:
-                      widget.controller.saleController,
+                          widget.controller.saleController,
                     ),
                   ),
                 ),

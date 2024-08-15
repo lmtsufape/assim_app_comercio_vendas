@@ -18,14 +18,19 @@ class EditProductsScreen extends StatefulWidget {
   ProductsModel model;
   EditProductsRepository repository;
 
-  EditProductsScreen(this.model, this.repository, {Key? key}) : super(key: key);
+  EditProductsScreen(this.model, this.repository,
+      {Key? key})
+      : super(key: key);
 
   @override
-  State<EditProductsScreen> createState() => _EditProductsScreenState();
+  State<EditProductsScreen> createState() =>
+      _EditProductsScreenState();
 }
 
-class _EditProductsScreenState extends State<EditProductsScreen> {
-  EditProductsRepository repository = EditProductsRepository();
+class _EditProductsScreenState
+    extends State<EditProductsScreen> {
+  EditProductsRepository repository =
+      EditProductsRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +46,15 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
           appBar: AppBar(
               title: Text(
                 'Editar produto',
-                style: kTitle2.copyWith(color: kPrimaryColor),
+                style:
+                    kTitle2.copyWith(color: kPrimaryColor),
               ),
-              iconTheme: const IconThemeData(color: kPrimaryColor),
+              iconTheme:
+                  const IconThemeData(color: kPrimaryColor),
               actions: <Widget>[
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(end: 14),
+                  padding: const EdgeInsetsDirectional.only(
+                      end: 14),
                   child: IconButton(
                     icon: Icon(
                       Icons.delete,
@@ -62,7 +70,9 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                                     'Excluir produto?',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: size.height * 0.020,
+                                      fontSize:
+                                          size.height *
+                                              0.020,
                                     ),
                                   ),
                                 ),
@@ -70,7 +80,8 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                                   'Você tem certeza que deseja excluir este produto?',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: size.height * 0.015,
+                                    fontSize:
+                                        size.height * 0.015,
                                   ),
                                 ),
                                 actions: [
@@ -79,71 +90,90 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                                       children: [
                                         ElevatedButton(
                                           onPressed: () {
-                                            Navigator.pop(context);
+                                            Navigator.pop(
+                                                context);
                                           },
                                           // ignore: sort_child_properties_last
                                           child: Text(
                                             'Cancelar',
-                                            style: TextStyle(
-                                              color: kBackgroundColor,
-                                              fontSize: size.height * 0.020,
+                                            style:
+                                                TextStyle(
+                                              color:
+                                                  kBackgroundColor,
+                                              fontSize:
+                                                  size.height *
+                                                      0.020,
                                             ),
                                           ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: kSuccessColor,
-                                            shape: RoundedRectangleBorder(
+                                          style:
+                                              ElevatedButton
+                                                  .styleFrom(
+                                            backgroundColor:
+                                                kSuccessColor,
+                                            shape:
+                                                RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(10),
+                                                  BorderRadius
+                                                      .circular(
+                                                          10),
                                             ),
                                           ),
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(left: 16),
-                                          child: ElevatedButton(
-                                            onPressed: () => widget.repository
-                                                        .deleteProduct(context,
-                                                            widget.model.id) ==
+                                              const EdgeInsets
+                                                  .only(
+                                                  left: 16),
+                                          child:
+                                              ElevatedButton(
+                                            onPressed: () => widget.repository.deleteProduct(
+                                                        context,
+                                                        widget
+                                                            .model.id) ==
                                                     true
                                                 ? showDialog(
-                                                    context: context,
+                                                    context:
+                                                        context,
                                                     builder: (context) =>
                                                         DefaultAlertDialogOneButton(
                                                           title: 'Erro',
-                                                          body:
-                                                              'Impossível excluir esse produto',
+                                                          body: 'Impossível excluir esse produto',
                                                           confirmText: 'Ok',
-                                                          onConfirm: () =>
-                                                              Get.back(),
-                                                          buttonColor:
-                                                              kSuccessColor,
+                                                          onConfirm: () => Get.back(),
+                                                          buttonColor: kSuccessColor,
                                                         ))
                                                 : showDialog(
-                                                    context: context,
+                                                    context:
+                                                        context,
                                                     builder: ((context) =>
                                                         DefaultAlertDialogOneButton(
                                                           title: 'Sucesso',
-                                                          body:
-                                                              'Produto excluído com sucesso',
+                                                          body: 'Produto excluído com sucesso',
                                                           confirmText: 'Ok',
-                                                          onConfirm: () =>
-                                                              Get.offAll(() =>
-                                                                  const HomeScreen()),
-                                                          buttonColor:
-                                                              kSuccessColor,
+                                                          onConfirm: () => Get.offAll(() => const HomeScreen()),
+                                                          buttonColor: kSuccessColor,
                                                         ))),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.redAccent,
-                                              shape: RoundedRectangleBorder(
+                                            style: ElevatedButton
+                                                .styleFrom(
+                                              backgroundColor:
+                                                  Colors
+                                                      .redAccent,
+                                              shape:
+                                                  RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                    BorderRadius.circular(
+                                                        10),
                                               ),
                                             ),
                                             child: Text(
                                               'Excluir',
-                                              style: TextStyle(
-                                                color: kBackgroundColor,
-                                                fontSize: size.height * 0.020,
+                                              style:
+                                                  TextStyle(
+                                                color:
+                                                    kBackgroundColor,
+                                                fontSize:
+                                                    size.height *
+                                                        0.020,
                                               ),
                                             ),
                                           ),
@@ -162,7 +192,8 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
             child: Container(
               width: size.width,
               height: size.height,
-              padding: const EdgeInsets.all(kDefaultPadding),
+              padding:
+                  const EdgeInsets.all(kDefaultPadding),
               child: ListView(
                 children: [
                   Divider(
@@ -189,15 +220,18 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     height: size.height * 0.005,
                     color: Colors.transparent,
                   ),
-                  DropDownEditProduct(controller, widget.model),
+                  DropDownEditProduct(
+                      controller, widget.model),
                   SaleInfos(controller, widget.model),
                   Divider(
                     height: size.height * 0.02,
                     color: Colors.transparent,
                   ),
                   Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: DropDownQtdEditProduct(controller, widget.model)),
+                      alignment:
+                          AlignmentDirectional.centerStart,
+                      child: DropDownQtdEditProduct(
+                          controller, widget.model)),
                   Divider(
                     height: size.height * 0.02,
                     color: Colors.transparent,
@@ -324,18 +358,22 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                     ),
                   ),*/
                   Divider(
-                      height: size.height * 0.015, color: Colors.transparent),
+                      height: size.height * 0.015,
+                      color: Colors.transparent),
                   SizedBox(
                     width: size.width,
                     height: size.height * 0.06,
                     child: OutlinedButton(
-                      onPressed: () => Get.off(() => ListProductsScreen()),
+                      onPressed: () => Get.off(
+                          () => ListProductsScreen()),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        side:
-                            const BorderSide(color: kDetailColor, width: 1.5),
+                        side: const BorderSide(
+                            color: kDetailColor,
+                            width: 1.5),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius:
+                              BorderRadius.circular(5),
                         ),
                       ),
                       child: Text(

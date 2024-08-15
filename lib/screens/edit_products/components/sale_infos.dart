@@ -1,9 +1,7 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:thunderapp/components/forms/custom_text_form_field.dart';
-import 'package:thunderapp/screens/add_products/add_products_controller.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
 import '../../../shared/core/models/products_model.dart';
 import '../edit_products_controller.dart';
@@ -12,7 +10,8 @@ class SaleInfos extends StatefulWidget {
   final EditProductsController controller;
   ProductsModel? productsModel;
 
-  SaleInfos(this.controller, this.productsModel, {Key? key}) : super(key: key);
+  SaleInfos(this.controller, this.productsModel, {Key? key})
+      : super(key: key);
 
   @override
   State<SaleInfos> createState() => _SaleInfosState();
@@ -61,8 +60,10 @@ class _SaleInfosState extends State<SaleInfos> {
                   child: Container(
                     alignment: Alignment.center,
                     child: CustomTextFormField(
-                      hintText: widget.productsModel!.descricao,
-                      erroStyle: const TextStyle(fontSize: 12),
+                      hintText:
+                          widget.productsModel!.descricao,
+                      erroStyle:
+                          const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
@@ -70,10 +71,12 @@ class _SaleInfosState extends State<SaleInfos> {
                       },
                       onChanged: (value) {
                         setState(() {
-                          widget.controller.setDescription();
+                          widget.controller
+                              .setDescription();
                         });
                       },
-                      controller: widget.controller.descriptionController,
+                      controller: widget
+                          .controller.descriptionController,
                     ),
                   ),
                 ),
@@ -107,7 +110,8 @@ class _SaleInfosState extends State<SaleInfos> {
                 child: ClipPath(
                   child: CustomTextFormField(
                     hintText: widget.productsModel!.titulo,
-                    erroStyle: const TextStyle(fontSize: 12),
+                    erroStyle:
+                        const TextStyle(fontSize: 12),
                     validatorError: (value) {
                       if (value.isEmpty) {
                         return 'Obrigatório';
@@ -118,7 +122,8 @@ class _SaleInfosState extends State<SaleInfos> {
                         widget.controller.setTitle();
                       });
                     },
-                    controller: widget.controller.titleController,
+                    controller:
+                        widget.controller.titleController,
                   ),
                 ),
               ),
@@ -156,7 +161,8 @@ class _SaleInfosState extends State<SaleInfos> {
                     alignment: Alignment.center,
                     child: CustomTextFormFieldCurrency(
                       keyboardType: TextInputType.number,
-                      erroStyle: const TextStyle(fontSize: 12),
+                      erroStyle:
+                          const TextStyle(fontSize: 12),
                       validatorError: (value) {
                         if (value.isEmpty) {
                           return 'Obrigatório';
@@ -169,14 +175,15 @@ class _SaleInfosState extends State<SaleInfos> {
                         });
                       },
                       currencyFormatter: <TextInputFormatter>[
-                        CurrencyTextInputFormatter(
+                        CurrencyTextInputFormatter.currency(
                           locale: 'pt-BR',
                           symbol: 'R\$',
                           decimalDigits: 2,
                         ),
                         LengthLimitingTextInputFormatter(9),
                       ],
-                      controller: widget.controller.saleController,
+                      controller:
+                          widget.controller.saleController,
                     ),
                   ),
                 ),
