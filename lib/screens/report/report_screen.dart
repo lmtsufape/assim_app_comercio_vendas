@@ -25,10 +25,18 @@ class _OrdersScreenState extends State<ReportScreen> {
       init: OrdersController(),
       builder: (controller) => Scaffold(
         appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          iconTheme: const IconThemeData(color: Colors.white),
+          centerTitle: true, // Centraliza o título corretamente
           title: Text(
-            'Pedidos',
-            style: kTitle2.copyWith(color: kPrimaryColor),
+            'Histórico',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: size.height * 0.030
+            ),
           ),
+          automaticallyImplyLeading: true,
         ),
         body: Container(
           padding: const EdgeInsets.all(kDefaultPadding - kSmallSize),

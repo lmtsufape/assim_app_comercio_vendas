@@ -138,15 +138,18 @@ class _ListProductsScreenState extends State<ListProductsScreen>
     return GetBuilder<ListProductsController>(
       builder: (controller) => Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           backgroundColor: kPrimaryColor,
-          title: Center(
-            child: Text(
-              'Produtos',
-              style: kTitle2.copyWith(color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.white),
+          centerTitle: true, // Centraliza o título corretamente
+          title: Text(
+            'Produtos',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: size.height * 0.030
             ),
           ),
-          iconTheme: const IconThemeData(color: Colors.white),
+          automaticallyImplyLeading: true,
         ),
         floatingActionButton: SizedBox(
           child: FloatingActionButton(

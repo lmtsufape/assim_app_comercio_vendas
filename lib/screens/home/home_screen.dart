@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) =>
-                                              ListProductsScreen(),
+                                              const ListProductsScreen(),
                                         ),
                                       );
                                     },
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8.0),
+                            const SizedBox(height: 8.0),
                             Row(
                               mainAxisAlignment:
                                   MainAxisAlignment.spaceBetween,
@@ -174,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     icon: Icons.edit_outlined,
                                     title: 'Editar banca',
                                     onTap: () {
-                                      Navigator.pushReplacement(
+                                      Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               fullscreenDialog: true,
@@ -195,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => AddStoreScreen(),
+                                          builder: (_) => const AddStoreScreen(),
                                         ),
                                       );
                                     },

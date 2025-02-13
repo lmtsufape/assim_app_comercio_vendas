@@ -2,11 +2,9 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thunderapp/screens/carrousel/carrousel_screen.dart';
-import 'package:thunderapp/screens/edit_products/edit_products_screen.dart';
 import 'package:thunderapp/screens/list_products/list_products_screen.dart';
 import 'package:thunderapp/screens/orders/orders_screen.dart';
 import 'package:thunderapp/screens/payments/payments_screen.dart';
-import 'package:thunderapp/screens/add_products/add_products_screen.dart';
 import 'package:thunderapp/screens/report/report_screen.dart';
 import 'package:thunderapp/screens/screens_index.dart';
 import 'package:thunderapp/screens/start/start_screen.dart';
@@ -64,7 +62,7 @@ class App extends StatelessWidget {
             const PaymentsScreen(),
         Screens.report: (context) => const ReportScreen(),
         Screens.listProducts: (context) =>
-            ListProductsScreen(),
+            const ListProductsScreen(),
       },
     );
   }
