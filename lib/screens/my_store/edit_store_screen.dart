@@ -45,17 +45,18 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
               },
               child: Scaffold(
                   appBar: AppBar(
-                    automaticallyImplyLeading: false,
                     backgroundColor: kPrimaryColor,
-                    title: Center(
-                      child: Text(
-                        'Editar banca',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: size.height * 0.030),
+                    iconTheme: const IconThemeData(color: Colors.white),
+                    centerTitle: true, // Centraliza o título corretamente
+                    title: Text(
+                      'Editar banca',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: size.height * 0.030
                       ),
                     ),
+                    automaticallyImplyLeading: true,
                   ),
                   body: SingleChildScrollView(
                     child: Form(

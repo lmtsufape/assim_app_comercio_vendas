@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:thunderapp/components/buttons/primary_button.dart';
 import 'package:thunderapp/components/utils/vertical_spacer_box.dart';
+import 'package:thunderapp/screens/my_store/components/dropdown_feira.dart';
 import 'package:thunderapp/screens/my_store/my_store_controller.dart';
 import 'package:thunderapp/shared/constants/app_enums.dart';
 import 'package:thunderapp/shared/constants/style_constants.dart';
@@ -37,15 +38,17 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
               child: Scaffold(
                   appBar: AppBar(
                     backgroundColor: kPrimaryColor,
-                    title: Center(
-                      child: Text(
-                        'Criar Banca',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: size.height * 0.030),
+                    iconTheme: IconThemeData(color: Colors.white),
+                    centerTitle: true, // Centraliza o título corretamente
+                    title: Text(
+                      'Criar Banca',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: size.height * 0.030
                       ),
                     ),
+                    automaticallyImplyLeading: true,
                   ),
                   body: SingleChildScrollView(
                     reverse: true,
@@ -121,6 +124,8 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
                                   )
                                 ],
                               ),
+                              const VerticalSpacerBox(size: SpacerSize.small),
+                              DropDownFeira(controller),
                               const VerticalSpacerBox(
                                   size: SpacerSize.small),
                               SizedBox(

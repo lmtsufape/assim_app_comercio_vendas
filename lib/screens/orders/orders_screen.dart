@@ -34,10 +34,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
       init: OrdersController(),
       builder: (controller) => Scaffold(
         appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          iconTheme: IconThemeData(color: Colors.white),
+          centerTitle: true, // Centraliza o título corretamente
           title: Text(
             'Pedidos',
-            style: kTitle2.copyWith(color: kPrimaryColor),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: size.height * 0.030
+            ),
           ),
+          automaticallyImplyLeading: true,
         ),
         body: RefreshIndicator(
           onRefresh: () => controller.fetchOrders(),
@@ -220,7 +228,7 @@ class _OrderCardState extends State<OrderCard> {
                                 borderRadius:
                                     BorderRadius.circular(
                                         5),
-                                color: kAlertColor),
+                                color: kPrimaryColor),
                             child: Text(
                               widget.model.status
                                   .toString(),
