@@ -35,7 +35,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       builder: (controller) => Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: Colors.white),
           centerTitle: true, // Centraliza o título corretamente
           title: Text(
             'Pedidos',
@@ -50,14 +50,59 @@ class _OrdersScreenState extends State<OrdersScreen> {
         body: RefreshIndicator(
           onRefresh: () => controller.fetchOrders(),
           child: Container(
-            padding: const EdgeInsets.all(
-                kDefaultPadding - kSmallSize),
+            padding: const EdgeInsets.all(kDefaultPadding - kSmallSize),
             height: size.height,
-            child: ListView(
-              children: controller.pedidos,
-            ),
+            child: controller.pedidos.isEmpty
+              ? _buildEmptyState(size)
+              : ListView(
+                  children: controller.pedidos,
+                ),
           ),
         ),
+      ),
+    );
+  }
+
+  // Widget para exibir quando não houver pedidos
+  Widget _buildEmptyState(Size size) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.assignment_outlined,
+            size: 80,
+            color: kPrimaryColor.withOpacity(0.7),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Nenhum pedido disponível',
+            style: TextStyle(
+              fontSize: size.height * 0.025,
+              fontWeight: FontWeight.bold,
+              color: kTextButtonColor,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Não há pedidos para visualizar no momento.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: size.height * 0.018,
+              color: kTextButtonColor.withOpacity(0.7),
+            ),
+          ),
+          const SizedBox(height: 20),
+          /*ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kPrimaryColor,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            ),
+            onPressed: () => controller.fetchOrders(),
+            child: const Text('Atualizar'),
+          ),*/
+        ],
       ),
     );
   }
@@ -94,14 +139,11 @@ class _OrderCardState extends State<OrderCard> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors
-                      .white, // Cor de fundo do Container
-                  borderRadius: BorderRadius.circular(
-                      10), // Bordas arredondadas
+                  color: Colors.white, // Cor de fundo do Container
+                  borderRadius: BorderRadius.circular(10), // Bordas arredondadas
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(
-                          0.5), // Cor da sombra com transparência
+                      color: Colors.grey.withOpacity(0.5), // Cor da sombra com transparência
                       spreadRadius: 1,
                       blurRadius: 10,
                       offset: const Offset(0, 0),
@@ -109,58 +151,39 @@ class _OrderCardState extends State<OrderCard> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                      kDefaultPaddingCardPedido),
+                  padding: const EdgeInsets.all(kDefaultPaddingCardPedido),
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
                             child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Pedido #${widget.model.id.toString()}',
-                                  style: kBody3.copyWith(
-                                      fontWeight:
-                                          FontWeight.bold),
-                                  overflow:
-                                      TextOverflow.ellipsis,
+                                  style: kBody3.copyWith(fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 Divider(
-                                  height:
-                                      size.height * 0.006,
+                                  height: size.height * 0.006,
                                   color: Colors.transparent,
                                 ),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Cliente:',
-                                      style: kCaption2.copyWith(
-                                          color:
-                                              kTextButtonColor),
+                                      style: kCaption2.copyWith(color: kTextButtonColor),
                                     ),
-                                    const SizedBox(
-                                        width: 10),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Text(
-                                        widget.model
-                                            .consumidorName!,
-                                        style:
-                                            const TextStyle(
-                                                fontSize:
-                                                    15),
-                                        overflow:
-                                            TextOverflow
-                                                .ellipsis,
+                                        widget.model.consumidorName!,
+                                        style: const TextStyle(fontSize: 15),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
@@ -172,13 +195,11 @@ class _OrderCardState extends State<OrderCard> {
                       ),
                       const Divider(),
                       Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
                             'Itens:',
-                            style: kCaption2.copyWith(
-                                color: kTextButtonColor),
+                            style: kCaption2.copyWith(color: kTextButtonColor),
                           ),
                           Text(NumberFormat.simpleCurrency(
                                   locale: 'pt-BR',
@@ -186,13 +207,10 @@ class _OrderCardState extends State<OrderCard> {
                               .format(widget.model.total))
                         ],
                       ),
-                      const VerticalSpacerBox(
-                          size: SpacerSize.medium),
-                      const VerticalSpacerBox(
-                          size: SpacerSize.medium),
+                      const VerticalSpacerBox(size: SpacerSize.medium),
+                      const VerticalSpacerBox(size: SpacerSize.medium),
                       Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           const Text(
                             'Total do pedido:',
@@ -203,38 +221,26 @@ class _OrderCardState extends State<OrderCard> {
                                     locale: 'pt-BR',
                                     decimalDigits: 2)
                                 .format(widget.model.total),
-                            style: kBody2.copyWith(
-                                color: kDetailColor),
+                            style: kBody2.copyWith(color: kDetailColor),
                           )
                         ],
                       ),
-                      const VerticalSpacerBox(
-                          size: SpacerSize.large),
+                      const VerticalSpacerBox(size: SpacerSize.large),
                       Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            DateFormat('dd/MM/yyyy').format(
-                                widget.model.dataPedido!),
-                            style: kCaption2.copyWith(
-                                color: kTextButtonColor,
-                                fontSize: 15),
+                            DateFormat('dd/MM/yyyy').format(widget.model.dataPedido!),
+                            style: kCaption2.copyWith(color: kTextButtonColor, fontSize: 15),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(
-                                kTinySize),
+                            padding: const EdgeInsets.all(kTinySize),
                             decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(
-                                        5),
+                                borderRadius: BorderRadius.circular(5),
                                 color: kPrimaryColor),
                             child: Text(
-                              widget.model.status
-                                  .toString(),
-                              style: kCaption2.copyWith(
-                                  color: kBackgroundColor,
-                                  fontSize: 14),
+                              widget.model.status.toString(),
+                              style: kCaption2.copyWith(color: kBackgroundColor, fontSize: 14),
                             ),
                           )
                         ],

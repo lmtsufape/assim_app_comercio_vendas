@@ -49,7 +49,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.assimvendedor"
+        applicationId "com.ufape.lmts.assimvendedor"
         minSdkVersion 21    // Especificando explicitamente
         targetSdkVersion 34 // Alterado para corresponder ao compileSdkVersion
         versionCode flutterVersionCode.toInteger()

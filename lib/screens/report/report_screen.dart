@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:thunderapp/components/utils/vertical_spacer_box.dart';
 import 'package:thunderapp/screens/order_detail/order_detail_screen.dart';
@@ -18,11 +19,20 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<ReportScreen> {
+  final ReportController reportController = Get.put(ReportController());
+  
+  @override
+  void initState() {
+    super.initState();
+    // Podemos adicionar aqui uma chamada para popular os relatórios, se não for feito no onInit do controller
+    // reportController.populateReportCard();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return GetBuilder<OrdersController>(
-      init: OrdersController(),
+    return GetBuilder<ReportController>(
+      init: ReportController(),
       builder: (controller) => Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
@@ -38,13 +48,69 @@ class _OrdersScreenState extends State<ReportScreen> {
           ),
           automaticallyImplyLeading: true,
         ),
-        body: Container(
-          padding: const EdgeInsets.all(kDefaultPadding - kSmallSize),
-          height: size.height,
-          child: ListView(
-            children: controller.pedidos,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            controller.pedidos = await controller.populateReportCard();
+            controller.update();
+            return;
+          },
+          child: Container(
+            padding: const EdgeInsets.all(kDefaultPadding - kSmallSize),
+            height: size.height,
+            child: controller.pedidos.isEmpty
+              ? _buildEmptyState(size, controller)
+              : ListView(
+                  children: controller.pedidos,
+                ),
           ),
         ),
+      ),
+    );
+  }
+
+  // Widget para exibir quando não há histórico
+  Widget _buildEmptyState(Size size, ReportController controller) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.history,
+            size: 80,
+            color: kPrimaryColor.withOpacity(0.7),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Nenhum histórico disponível',
+            style: TextStyle(
+              fontSize: size.height * 0.025,
+              fontWeight: FontWeight.bold,
+              color: kTextButtonColor,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Não há itens no histórico para visualizar.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: size.height * 0.018,
+              color: kTextButtonColor.withOpacity(0.7),
+            ),
+          ),
+          const SizedBox(height: 20),
+          /*ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kPrimaryColor,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            ),
+            onPressed: () async {
+              controller.pedidos = await controller.populateReportCard();
+              controller.update();
+            },
+            child: const Text('Atualizar'),
+          ),*/
+        ],
       ),
     );
   }

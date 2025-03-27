@@ -14,7 +14,6 @@ import '../../shared/core/image_picker_controller.dart';
 import '../home/home_screen.dart';
 import '../screens_index.dart';
 
-
 class MyStoreController extends GetxController {
   UserStorage userStorage = UserStorage();
   MyStoreRepository myStoreRepository = MyStoreRepository();
@@ -34,6 +33,7 @@ class MyStoreController extends GetxController {
     feiras = await myStoreRepository.getFeiras();
     update();
   }
+  
   final List<bool> isSelected = [false, false, false];
   final List<String> checkItems = ['Dinheiro', 'PIX', 'Cartão'];
 
@@ -67,23 +67,15 @@ class MyStoreController extends GetxController {
   final TextEditingController _feiraIdController = TextEditingController();
   final TextEditingController _pixController = TextEditingController();
   final TextEditingController _quantiaMinController = TextEditingController();
-  final TextEditingController _horarioAberturaController =
-      TextEditingController();
-  final TextEditingController _horarioFechamentoController =
-      TextEditingController();
+  final TextEditingController _horarioAberturaController = TextEditingController();
+  final TextEditingController _horarioFechamentoController = TextEditingController();
 
   TextEditingController get nomeBancaController => _nomeBancaController;
   TextEditingController get feiraIdController => _feiraIdController;
-
   TextEditingController get quantiaMinController => _quantiaMinController;
-
   TextEditingController get pixController => _pixController;
-
-  TextEditingController get horarioAberturaController =>
-      _horarioAberturaController;
-
-  TextEditingController get horarioFechamentoController =>
-      _horarioFechamentoController;
+  TextEditingController get horarioAberturaController => _horarioAberturaController;
+  TextEditingController get horarioFechamentoController => _horarioFechamentoController;
 
   void onItemTapped(int index) {
     isSelected[index] = !isSelected[index];
@@ -98,7 +90,7 @@ class MyStoreController extends GetxController {
     // Ativa o checkbox selecionado
     delivery[index] = true;
     deliver = delivery[0];
-    print(deliver);
+    print("Entrega: $deliver");
     update();
   }
 
@@ -106,6 +98,7 @@ class MyStoreController extends GetxController {
     deliver = value;
     update();
   }
+  
   void setPixBool(bool value){
     pixBool = value;
     update();
@@ -161,6 +154,38 @@ class MyStoreController extends GetxController {
     update();
   }
 
+  // Adicionar ao MyStoreController
+  Future<bool> editBancaAsync(BuildContext context, BancaModel banca) async {
+    try {
+      // Validações adicionais
+      if (nomeBancaController.text.isEmpty && 
+          horarioAberturaController.text.isEmpty && 
+          horarioFechamentoController.text.isEmpty && 
+          quantiaMinController.text.isEmpty && 
+          _imagePath == null) {
+        print("Nenhum campo foi alterado");
+        return false;
+      }
+
+      editSucess = await myStoreRepository.editarBanca(
+        nomeBancaController.text.trim(),
+        horarioAberturaController.text.trim(),
+        horarioFechamentoController.text.trim(),
+        quantiaMinController.text.trim(),
+        feira,
+        _imagePath,
+        isSelected,
+        pixController.text.trim(),
+        deliver,
+        banca);
+      
+      return editSucess;
+    } catch (e) {
+      print("Erro ao editar banca: $e");
+      return false;
+    }
+  }
+
   Future selectImage() async {
     try {
       File? file = await _imagePickerController.pickImageFromGallery();
@@ -196,20 +221,52 @@ class MyStoreController extends GetxController {
   }
 
   void editBanca(BuildContext context, BancaModel banca) async {
+    // Aqui verificamos quais campos foram alterados
+    // Deixamos vazios os que não foram alterados para manter os valores originais
+    String nome = _nomeBancaController.text.trim();
+    String horarioAbertura = _horarioAberturaController.text.trim();
+    String horarioFechamento = _horarioFechamentoController.text.trim();
+    String precoMin = _quantiaMinController.text.trim();
+    String pix = _pixController.text.trim();
+    
+    // Nota para o log, apenas para debug
+    log("Editando banca: Nome: ${nome.isEmpty ? 'não alterado' : nome}");
+    log("Horário Abertura: ${horarioAbertura.isEmpty ? 'não alterado' : horarioAbertura}");
+    log("Horário Fechamento: ${horarioFechamento.isEmpty ? 'não alterado' : horarioFechamento}");
+    log("Preço Min: ${precoMin.isEmpty ? 'não alterado' : precoMin}");
+    log("PIX: ${pix.isEmpty ? 'não alterado' : pix}");
+    log("Imagem selecionada: ${_imagePath == null ? 'não alterada' : 'nova imagem'}");
+    
     editSucess = await myStoreRepository.editarBanca(
-        _nomeBancaController.text,
-        _horarioAberturaController.text,
-        _horarioFechamentoController.text,
-        _quantiaMinController.text,
+        nome,
+        horarioAbertura,
+        horarioFechamento,
+        precoMin,
         feira,
         _imagePath,
         isSelected,
-        _pixController.text,
+        pix,
         deliver,
         banca);
+        
     if (editSucess) {
       // ignore: use_build_context_synchronously
       Get.offAll(() => const HomeScreen());
+    } else {
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Erro'),
+          content: const Text("Ocorreu um erro ao editar a banca. Verifique os campos e tente novamente."),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -225,6 +282,7 @@ class MyStoreController extends GetxController {
           isSelected,
           deliver,
           _pixController.text);
+          
       if (adcSucess) {
         // ignore: use_build_context_synchronously
         showDialog(
@@ -246,7 +304,7 @@ class MyStoreController extends GetxController {
           textoErro = "Insira o horário de fechamento";
         } else if (_quantiaMinController.text.isEmpty) {
           textoErro = "Insira uma quantia mínima para entrega";
-        } else if (isSelected.isEmpty) {
+        } else if (!isSelected.contains(true)) {
           textoErro = "Adicione pelo menos um método de pagamento";
         } else {
           log("Ocorreu um erro, verifique os campos");
@@ -271,31 +329,29 @@ class MyStoreController extends GetxController {
   }
 
   bool verifySelectedFields() {
-    if (_horarioFechamentoController.text.isNotEmpty &&
-        _horarioFechamentoController.text.isNotEmpty &&
-        _nomeBancaController.text.isNotEmpty) {
-      for (int i = 0; i < isSelected.length; i++) {
-        if (isSelected[i] == true) {
-          return true;
-        }
-      }
-    }
-    return false;
+    // Verificamos se pelo menos uma forma de pagamento foi selecionada
+    return isSelected.contains(true);
   }
 
   bool verifyFields() {
-    if (_nomeBancaController.text.isNotEmpty &&
-        _horarioAberturaController.text.isNotEmpty &&
-        _horarioFechamentoController.text.isNotEmpty &&
-        _imagePath != null) {
-      for (int i = 0; i < isSelected.length; i++) {
-        if (isSelected[i] == true) {
-          return true;
-        }
-      }
+    // Para edição, consideramos como válido quando:
+    // - Pelo menos um campo foi editado
+    // - E pelo menos uma forma de pagamento está selecionada
+    bool hasChanges = _nomeBancaController.text.isNotEmpty || 
+                      _horarioAberturaController.text.isNotEmpty ||
+                      _horarioFechamentoController.text.isNotEmpty ||
+                      _quantiaMinController.text.isNotEmpty ||
+                      _pixController.text.isNotEmpty ||
+                      _imagePath != null;
+                      
+    bool hasPagamento = isSelected.contains(true);
+    
+    if (!hasPagamento) {
+      textoErro = "Selecione pelo menos uma forma de pagamento";
       return false;
     }
-    return false;
+    
+    return true;
   }
 
   @override
@@ -305,4 +361,3 @@ class MyStoreController extends GetxController {
     update();
   }
 }
-

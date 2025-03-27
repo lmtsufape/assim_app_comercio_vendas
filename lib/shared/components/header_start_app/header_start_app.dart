@@ -26,7 +26,7 @@ class HeaderStartApp extends StatelessWidget {
         Column(
           children: [
             Text(
-              'VIDA AGROECOLÓGICA',
+              'ASSIM AGROECOLÓGICA',
               textAlign: TextAlign.center,
               style: kTitle1.copyWith(
                   color: kOnSurfaceColor,
